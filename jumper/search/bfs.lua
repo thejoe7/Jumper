@@ -24,7 +24,9 @@ if (...) then
 
     -- Calculates a path.
     -- Returns the path from location `<startX, startY>` to location `<endX, endY>`.
-    return function (finder, startNode, endNode, clearance, toClear)
+    -- if __distance__ is set, find the path to the first node __distance__ away from endNode
+    return function (finder, startNode, endNode, clearance, toClear, distance)
+        if not distance then distance = 0 end
 
         local openList = {} -- We'll use a FIFO queue (simple array)
         openList[1] = startNode
@@ -36,7 +38,8 @@ if (...) then
             node = openList[1]
             t_remove(openList,1)
             node._closed = true
-            if node == endNode then return node end
+            if node:distanceTo(endNode) <= distance then return node end
+            -- if node == endNode then return node end
             breadth_first_search(finder, openList, node, endNode, clearance, toClear)
         end
 

@@ -51,6 +51,11 @@ if (...) then
     -- @treturn number the y-coordinate of the `node`
     -- @usage local x, y = node:getPos()        
     function Node:getPos() return self._x, self._y end
+
+    --- Returns the distance from a `node` to the other
+    function Node:distanceTo(node)
+        return math.sqrt((self._x - node._x) ^ 2 + (self._y - node._y) ^ 2)
+    end
     
     --- Returns the amount of true [clearance](http://aigamedev.com/open/tutorial/clearance-based-pathfinding/#TheTrueClearanceMetric) 
     -- for a given `node`

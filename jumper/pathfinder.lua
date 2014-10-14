@@ -334,16 +334,17 @@ if (...) then
     -- @tparam int endX the x-coordinate for the goal location
     -- @tparam int endY the y-coordinate for the goal location
     -- @tparam int clearance the amount of clearance (i.e the pathing agent size) to consider
+    -- @tparam double distance the distance that the current node is away from the end node when pathfinder should stop searching
     -- @treturn path a path (array of nodes) when found, otherwise nil
     -- @usage local path = myFinder:getPath(1,1,5,5)
-    function Pathfinder:getPath(startX, startY, endX, endY, clearance)
+    function Pathfinder:getPath(startX, startY, endX, endY, clearance, distance)
         self:reset()
         local startNode = self._grid:getNodeAt(startX, startY)
         local endNode = self._grid:getNodeAt(endX, endY)
         assert(startNode, ('Invalid location [%d, %d]'):format(startX, startY))
         assert(endNode and self._grid:isWalkableAt(endX, endY),
             ('Invalid or unreachable location [%d, %d]'):format(endX, endY))
-        local _endNode = Finders[self._finder](self, startNode, endNode, clearance, toClear)
+        local _endNode = Finders[self._finder](self, startNode, endNode, clearance, toClear, distance)
         if _endNode then
             return Utils.traceBackPath(self, _endNode, startNode)
         end

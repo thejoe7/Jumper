@@ -40,9 +40,11 @@ if (...) then
         end
     end
 
-  -- Calculates a path.
-  -- Returns the path from location `<startX, startY>` to location `<endX, endY>`.
-  return function (finder, startNode, endNode, clearance, toClear, overrideHeuristic, overrideCostEval)
+    -- Calculates a path.
+    -- Returns the path from location `<startX, startY>` to location `<endX, endY>`.
+    -- if __distance__ is set, find the path to the first node __distance__ away from endNode
+    return function (finder, startNode, endNode, clearance, toClear, distance, overrideHeuristic, overrideCostEval)
+        if not distance then distance = 0 end
         
         local heuristic = overrideHeuristic or finder._heuristic
         local openList = Heap()
@@ -56,7 +58,8 @@ if (...) then
         while not openList:empty() do
             local node = openList:pop()
             node._closed = true
-            if node == endNode then return node end
+            if node:distanceTo(endNode) <= distance then return node end
+            -- if node == endNode then return node end
             local neighbours = finder._grid:getNeighbours(node, finder._walkable, finder._allowDiagonal, finder._tunnel)
             for i = 1,#neighbours do
                 local neighbour = neighbours[i]
